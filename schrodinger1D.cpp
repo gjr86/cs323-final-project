@@ -38,27 +38,30 @@ MatrixXd buildHamiltonian(int N){
     return H;
 }
 
+Eigen::VectorXd RQI(MatrixXd H){
+
+    return Eigen::VectorXd{};
+}
+
 Eigen::VectorXd getEigen(int N){
-        outfile << std::endl << "N=" << N << " Eigenvalues:"<< std::endl;
+    outfile << std::endl << "N=" << N << std::endl;
 
-        Eigen::MatrixXd H = buildHamiltonian(N);
+    Eigen::MatrixXd H = buildHamiltonian(N);
 
-        Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> eigensolver(H);
-        if (eigensolver.info() != Eigen::Success) abort();
+    Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> eigensolver(H);
+    if (eigensolver.info() != Eigen::Success) abort();
 
-        Eigen::VectorXd evalue = (eigensolver.eigenvalues()).head(50);
-        outfile << evalue << std::endl;
+    Eigen::VectorXd evalue = (eigensolver.eigenvalues()).head(50);
+    outfile << evalue << std::endl;
 
-        return evalue;
+    return evalue;
 }
 
 int main(){
-    // prepare a file for output
     if (!outfile.is_open()) {
         std::cerr << "Error opening output file." << std::endl;
         return 1;
     }
-    outfile << "---1D Schrodinger Equation Numerical Solution---" << std::endl;
 
     int i = 100;
     while(i<=1000){
