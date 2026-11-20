@@ -16,7 +16,7 @@ double V(double x){
 }
 
 MatrixXd buildHamiltonian(int N){
-    // H = -hbar^2 / 2m (d/dx)^2 + V(x)
+    // choice of x limits are completely arbitrary at this point
     const double xmax = 10, xmin = -10, dx = ((xmax-xmin) / (N-1));
     double a = (-1 * hbar * hbar) / (2*m*dx*dx);
     Eigen::MatrixXd H(N, N);
@@ -39,17 +39,15 @@ MatrixXd buildHamiltonian(int N){
 }
 
 Eigen::VectorXd getEigen(int N){
-        outfile << std::endl << "N=" << N << std::endl;
+        outfile << std::endl << "N=" << N << " Eigenvalues:"<< std::endl;
 
         Eigen::MatrixXd H = buildHamiltonian(N);
+
         Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> eigensolver(H);
         if (eigensolver.info() != Eigen::Success) abort();
-        Eigen::VectorXd evalue = eigensolver.eigenvalues();
 
-        // double alpha = (N+1)*(N+1)/2.0;
-        // evalue *= alpha;
-
-        outfile << "Eigenvalues: \n " << evalue << std::endl;
+        Eigen::VectorXd evalue = (eigensolver.eigenvalues()).head(50);
+        outfile << evalue << std::endl;
 
         return evalue;
 }
@@ -62,8 +60,11 @@ int main(){
     }
     outfile << "---1D Schrodinger Equation Numerical Solution---" << std::endl;
 
-    getEigen(100);
-    getEigen(500);
+    int i = 100;
+    while(i<=1000){
+        getEigen(i);
+        i+=100;
+    }
 
     outfile.close();
     return 0;
